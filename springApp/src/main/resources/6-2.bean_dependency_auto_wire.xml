@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean	id="userDao" class="com.itwill.user.UserDaoImplJDBC"/>
+	<bean	id="springUserDao" class="com.itwill.user.UserDaoImplSpringDao" primary="true"/>
+	
+	<!-- byName -->
+	<bean 	id="byNameUserService" 
+			autowire="byName"
+			class="com.itwill.user.UserServiceImpl"/>
+			
+	<!-- byType -->
+	<bean 	id="byTypeUserService" 
+			autowire="byType"
+			class="com.itwill.user.UserServiceImpl"/>
+			
+	<!-- constructor -->
+	<bean 	id="byConstructorUserService"
+			autowire="constructor"
+			class="com.itwill.user.UserServiceImpl"/>
+	
+			
+
+</beans>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!-- init-method, destroy-method , lazy-init -->
+	<bean 
+		id="initDestroyBean" 
+		init-method="myInit"
+		destroy-method="myDestroy"
+		lazy-init="false"
+		class="com.itwill4.bean.attr.InitDestroyBean"/>
+	<!-- depends-on -->
+	<bean 	id="a" 
+	   		class="com.itwill4.bean.attr.DependsOnA" 
+			depends-on="b"/>
+	<bean id="b" class="com.itwill4.bean.attr.DependsOnB"/>
+	<!-- factory-method -->
+	<bean id="factoryBean"
+		 factory-method="getInstance"
+		 class="com.itwill4.bean.attr.FactoryMethodBean"/>
+	<!-- scope -->	 
+	<bean 	id="singletonBean" 
+	        scope="singleton"
+			class="com.itwill4.bean.attr.SingletonScopeBean"/>
+	<bean   id="prototypeBean"
+			scope="prototype" 
+			class="com.itwill4.bean.attr.PrototypeScopeBean"/>
+	
+		 
+</beans>
+
+
+
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<!-- 1. constructor injection -->
+	<!-- primitive type(String) -->
+	<bean id="constructorInjectionUser1" class="com.itwill.user.User">
+		<constructor-arg index="0" value="tomato"/>
+		<constructor-arg index="1" value="tomato@naver.com"/>
+	</bean>
+	
+	<bean id="constructorInjectionUser2" class="com.itwill.user.User">
+		<constructor-arg index="0" value="melon"/>
+		<constructor-arg index="1" value="11111"/>
+		<constructor-arg index="2" value="melonName"/>
+		<constructor-arg index="3" value="melon@naver.com"/>
+	</bean>
+	
+	<!-- ref type -->
+	<bean id="cUserDao" class="com.itwill.user.UserDaoImplJDBC"/>
+	<bean id="cUserService" class="com.itwill.user.UserServiceImpl">
+		<constructor-arg ref="cUserDao"/>
+	</bean>
+	
+	
+	
+	<!-- 2. setter method injection -->
+	<!-- primitive type(String) -->
+	<bean id="setterInjectionUser1" class="com.itwill.user.User">
+		<property name="userId" value="guard"/>
+		<property name="password" value="1111"/>
+		<property name="name" value="김경호"/>
+		<property name="email" value="guard@naver.com"/>
+	</bean>
+	<bean 
+		id="setterInjectionUser2" 
+		class="com.itwill.user.User"
+		p:userId="orange"
+		p:password="3333"
+		p:name="오렌지"
+		p:email="orange@naver.com"
+	/>
+	<!-- ref type -->
+	<bean id="userDao" class="com.itwill.user.UserDaoImplJDBC"/>
+	<bean id="userService" class="com.itwill.user.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	
+	<!-- 3. constructor + setter injection -->
+	<bean id="Con_Setter_userService" class="com.itwill.user.UserServiceImpl">
+		<constructor-arg ref="userDao"/>
+		<property name="serviceName" value="사용자관리서비스"/>
+	</bean>
+	
+	
+	<!-- 4. List, Set, Map, Properties injection -->
+	<bean id="/user_view.do" class="com.itwill6.dependency.ViewController"></bean>
+	<bean id="/user_list.do" class="com.itwill6.dependency.ListController"></bean>
+	<bean id="/user_login.do" class="com.itwill6.dependency.LoginController"></bean>
+	<!-- primitive type(String), ref type -->
+	<bean id="collectionMapInjectionBean" class="com.itwill6.dependency.CollectionMapInjectionBean">
+		<property name="addressList">
+			<list>
+				<value>서울시</value>
+				<value>부산시</value>
+				<value>제주시</value>
+			</list>
+		</property>
+		<property name="addressSet">
+			<set>
+				<value>set1</value>
+				<value>set2</value>
+				<value>set3</value>
+				<value>set4</value>
+			</set>
+		</property>
+		<property name="addressMap">
+			<map>
+				<entry key="home" value="서울"/>
+				<entry key="office1" value="서울1"/>
+				<entry key="office2" value="서울2"/>
+			</map>
+		</property>
+		<property name="addressProperties">
+			<props>
+				<prop key="addr1">주소1</prop>
+				<prop key="addr2">주소2</prop>
+				<prop key="addr3">주소3</prop>
+				<prop key="addr4">주소4</prop>
+			</props>
+		</property>
+		<property name="controllerList">
+			<list>
+				<ref bean="/user_list.do"/>
+				<ref bean="/user_login.do"/>
+				<ref bean="/user_view.do"/>
+			</list>
+		</property>
+		<property name="controllerSet">
+			<set>
+				<ref bean="/user_list.do"/>
+				<ref bean="/user_login.do"/>
+				<ref bean="/user_view.do"/>
+			</set>
+		</property>
+		<property name="controllerMap">
+			<map>
+				<entry key="/user_list.do" value-ref="/user_list.do"/>
+				<entry key="/user_login.do" value-ref="/user_login.do"/>
+				<entry key="/user_view.do" value-ref="/user_view.do"/>
+			</map>
+		</property>
+		<property name="controllerProperties">
+			<props>
+				<prop key="/user_list.do">com.itwill6.dependency.ListController</prop>
+				<prop key="/user_login.do">com.itwill6.dependency.LoginController</prop>
+				<prop key="/user_view.do">com.itwill6.dependency.ViewController</prop>
+			</props>
+		</property>
+	</bean> 
+	
+		 
+</beans>
+
+
+
+

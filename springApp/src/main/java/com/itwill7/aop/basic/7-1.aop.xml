@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	<!-- target -->	
+	<bean id="userDao" class="com.itwill.user.UserDaoImplJDBC"/>
+	<bean id="userService" class="com.itwill.user.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	<bean id="emailSendTargetBean"  class="com.itwill7.aop.basic.EmailSendAfterThrowingTargetBean"/>
+	
+	<!-- advice -->
+	<bean id="beforeLogAdvice" class="com.itwill7.aop.basic.LoggingBeforeAdvice"/>
+	<bean id="profilingAroundAdvice" class="com.itwill7.aop.basic.ProfilingAroundAdvice"/>
+	<bean id="loggingAfterAdvice"  class="com.itwill7.aop.basic.LoggingAfterAdvice"/>	
+	<bean id="loggingAfterReturningAdvice" class="com.itwill7.aop.basic.LoggingAfterReturningAdvice"/>
+	<bean id="emailSendAfterThrowingAdvice"	 class="com.itwill7.aop.basic.EmailSendAfterThrowingAdvice"/>	
+			  	 
+	<!-- weaving -->	 
+	<aop:config>
+		<aop:pointcut 	id="afterReturningPointcut"
+						expression="execution(* com.itwill.user.User*.update(*))"/>
+	
+		<!-- after throwing joinpoint -->
+		<aop:aspect ref="emailSendAfterThrowingAdvice">
+			<aop:after-throwing 
+			    pointcut="execution(public void com.itwill7.aop.basic.EmailSendAfterThrowingTargetBean.exceptionThrowMethod())"
+				method="emailSend"
+				throwing="exObj"/>
+		</aop:aspect>
+		<!-- after retrning joinpoint -->
+		<aop:aspect ref="loggingAfterReturningAdvice">
+			<aop:after-returning 
+				method="afterReturningLog"
+				pointcut-ref="afterReturningPointcut"
+				returning="returnObj"
+				/>
+		</aop:aspect>
+		<!-- after joinpoint -->
+		<aop:aspect ref="loggingAfterAdvice">
+			<aop:after 
+				method="afterLog" 
+				pointcut="execution(* com.itwill.user.UserService.find*(..))"/>
+		</aop:aspect>
+		
+		<!-- around joinpoint -->
+		<aop:aspect ref="profilingAroundAdvice">
+			<aop:around 
+				method="aroundProfilingAdvice" 
+				pointcut="execution(* com.itwill.user.UserDao.*(..))" />
+		</aop:aspect>
+		
+		<!-- advice + before joinpoint -->
+		<aop:aspect  ref="beforeLogAdvice">
+			<aop:pointcut 
+				expression="execution(* com.itwill.user.UserService.create(..))" 
+				id="loggingBeforePointcut"/>
+			<aop:before method="beforeLog" pointcut-ref="loggingBeforePointcut"/>
+		</aop:aspect>
+		
+	
+	</aop:config>
+	
+</beans>
+
+
+
+

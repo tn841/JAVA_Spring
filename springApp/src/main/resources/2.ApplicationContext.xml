@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="helloMessageObject"  class="com.itwill2.spring.HelloMessageObject"/>
+	<bean id="hiMessageObject"  class="com.itwill2.spring.HiMessageObject"/>
+	<bean id="byeMessageObject"  class="com.itwill2.spring.ByeMessageObject"/>
+	<bean id="goodByeMessageObject"  class="com.itwill2.spring.GoodByeMessageObject"/>
+	
+	<bean id="messagePrint1" class="com.itwill2.spring.MessagePrint">
+		<property name="messageObject" ref="helloMessageObject"/>
+	</bean>
+	
+	<bean id="messagePrint2" class="com.itwill2.spring.MessagePrint">
+		<property name="messageObject" ref="hiMessageObject"/>
+	</bean>
+	
+	<bean id="messagePrint3" class="com.itwill2.spring.MessagePrint">
+		<property name="messageObject" ref="goodByeMessageObject"/>
+	</bean>
+</beans>
+
