@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis3.mappers.CourseMapper">
+	<resultMap id="courseResult" type="com.mybatis3.domain.Course">
+		<id property="courseId" column="COURSE_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="description" column="DESCRIPTION"/>
+		<result property="startDate" column="START_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+	</resultMap>
+	<select id="findCoursesByTutorId" 
+			resultMap="courseResult"
+			parameterType="int">
+		<bind name="tid" value="_parameter"/>	
+		SELECT * FROM COURSES
+		<where>
+			<if test="tid!=null">
+				TUTOR_ID=#{TUTOR_ID}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findCourses" 
+			parameterType="hashmap"
+			resultMap="courseResult">
+		<!--<bind name="c_name" value="'%'+cn+'%'"/>-->
+		
+		SELECT * FROM COURSES
+		<trim prefix="WHERE" prefixOverrides="AND|OR" >
+			<if test="tid!=null">
+				TUTOR_ID = #{tid}
+			</if>
+			<if test="cn!=null">
+				AND NAME LIKE '%'||#{cn}||'%'
+			</if>
+			<if test="d!=null">
+				AND START_DATE >= TO_DATE(#{d})
+			</if>
+		</trim>
+		<!-- 
+		<where>
+			<if test="tid!=null">
+				TUTOR_ID = #{tid}
+			</if>
+			<if test="cn!=null">
+				AND NAME LIKE '%'||#{cn}||'%'
+			</if>
+			<if test="d!=null">
+				AND START_DATE >= TO_DATE(#{d})
+			</if>
+		</where>
+		-->
+	</select>	
+</mapper>
+
+
+
+
+
+
+
+

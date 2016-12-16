@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.mybatis3.mappers.StudentMapper">
+	<!-- resultMap -->
+	<resultMap id="studentResult" type="com.mybatis3.domain.Student" >
+		<result property="studId" column="STUD_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+		<result property="dob" column="DOB"/>
+	</resultMap>
+	<resultMap id="studentExtWithAddressResult" 
+			   type="com.mybatis3.domain.Student"
+			   extends="studentResult">
+			   
+		<result property="address.addrId" column="addr_id"/>
+		<result property="address.street" column="street"/>
+		<result property="address.city" column="city"/>
+		<result property="address.state" column="state"/>
+		<result property="address.zip" column="zip"/>
+		<result property="address.country" column="country"/>
+	</resultMap>
+	<resultMap id="studentWithAddressTypeResult" 
+			   type="com.mybatis3.domain.Student">
+		<id property="studId" column="STUD_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+		<result property="dob" column="DOB"/>   
+		<association property="address"  
+					 javaType="com.mybatis3.domain.Address">
+			<result property="addrId" column="addr_id"/>
+			<result property="street" column="street"/>
+			<result property="city" column="city"/>
+			<result property="state" column="state"/>
+			<result property="zip" column="zip"/>
+			<result property="country" column="country"/>	 
+		</association>
+	</resultMap>
+	<resultMap  id="studentWithAddressResult" 
+				type="com.mybatis3.domain.Student">
+		<result property="studId" column="STUD_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+		<result property="dob" column="DOB"/>
+		<association property="address" 
+					 resultMap="com.mybatis3.mappers.AddressMapper.addressResult"/>
+	</resultMap>
+	<resultMap id="studentWithAddressNestedSelectResult" 
+			   type="com.mybatis3.domain.Student" >
+		<result property="studId" column="STUD_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+		<result property="dob" column="DOB"/>	   
+		<association 
+			property="address" 
+			column="addr_id"
+			select="com.mybatis3.mappers.AddressMapper.findAddressById"
+			/>
+	</resultMap>
+	<!--**********************************************-->
+	<select id="findStudentById" 
+	        parameterType="java.lang.Integer"
+			resultType="com.mybatis3.domain.Student">
+		SELECT STUD_ID as studId ,NAME,EMAIL,DOB FROM STUDENTS 
+		WHERE STUD_ID = #{STU_ID}
+	</select>
+	
+	
+	<select id="findStudentByIdMap"
+			parameterType="int"
+			resultType="java.util.Map">
+		SELECT STUD_ID ,NAME,EMAIL,DOB FROM STUDENTS 
+		WHERE STUD_ID = #{STU_ID}	
+	</select>
+	<select id="findStudentByIdResultMap" 
+	        parameterType="java.lang.Integer"
+			resultMap="studentResult">
+		SELECT STUD_ID ,NAME,EMAIL,DOB FROM STUDENTS 
+		WHERE STUD_ID = #{STU_ID}
+	</select>
+	<select id="findAllStudents" 
+			resultType="com.mybatis3.domain.Student">
+		SELECT STUD_ID as studId,NAME,EMAIL,DOB FROM STUDENTS		
+	</select>
+	<select id="findAllStudentsResultMap" 
+			resultMap="studentResult">
+		SELECT STUD_ID,NAME,EMAIL,DOB FROM STUDENTS		
+	</select>
+	<select id="findAllStudentsMap" 
+			resultType="java.util.Map">
+		SELECT STUD_ID,name,EMAIL,DOB FROM STUDENTS		
+	</select>
+	
+	
+	<insert id="insertStudent" 
+			parameterType="com.mybatis3.domain.Student">
+		INSERT INTO STUDENTS(STUD_ID,NAME,EMAIL,DOB)
+		VALUES
+		(#{studId},#{name},#{email},#{dob})
+	</insert>
+	<insert id="insertStudentBySequence" 
+			parameterType="com.mybatis3.domain.Student">
+		<selectKey keyProperty="studId" order="BEFORE" resultType="int">
+			SELECT STUDENTS_STUD_ID_SEQ.NEXTVAL FROM DUAL
+		</selectKey>	
+		INSERT INTO STUDENTS(STUD_ID,NAME,EMAIL,DOB)
+		VALUES
+		(#{studId},#{name},#{email},#{dob})
+	</insert>
+	
+	<insert id="insertStudentParameterMap" 
+			parameterType="java.util.Map">
+		INSERT INTO STUDENTS(STUD_ID,NAME,EMAIL,DOB)
+		VALUES
+		(#{id},#{irum},#{myemail},#{birthday})
+	</insert>
+	
+	
+	<update id="updateStudent" 
+			parameterType="com.mybatis3.domain.Student">
+		UPDATE STUDENTS 
+		SET 
+		NAME=#{name},
+		EMAIL=#{email},
+		DOB=#{dob}
+		WHERE STUD_ID=#{studId}
+	</update>
+	<!-- dynamic sql -->
+	<update id="updateStudentDynamicSql" 
+			parameterType="com.mybatis3.domain.Student">
+		UPDATE STUDENTS 
+		
+		<set>
+			<if test="name!=null">
+				NAME=#{name},
+			</if>
+			<if test="email!=null">
+				EMAIL=#{email},
+			</if>
+			<if test="dob!=null">
+				DOB=#{dob}
+			</if>
+		</set>
+		<!-- 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name!=null">
+				NAME=#{name},
+			</if>
+			<if test="email!=null">
+				EMAIL=#{email},
+			</if>
+			<if test="dob!=null">
+				DOB=#{dob}
+			</if>
+		</trim>
+		-->
+		
+		WHERE STUD_ID=#{studId}
+	</update>
+	
+	
+	<delete id="deleteStudent"
+			parameterType="int">
+		DELETE FROM
+		STUDENTS
+		WHERE STUD_ID=#{STUD_ID}
+	</delete>
+	<!--************* case1 ***************
+	<select id="findStudentByIdWithAddress" 
+			parameterType="int"
+			resultMap="studentExtWithAddressResult"
+			>
+	   SELECT stud_id, name, email,phone, a.addr_id, 
+	   		  street, city, state, zip, country
+  	   FROM students s 
+  	   LEFT OUTER JOIN addresses a 
+       ON s.addr_id=a.addr_id
+       WHERE s.stud_id=#{stud_id}
+	</select>
+	-->
+	<!--************* case2 ***************
+  	<select id="findStudentByIdWithAddress" 
+			parameterType="int"
+			resultMap="studentWithAddressTypeResult"
+			>
+	   SELECT stud_id, name, email,phone, a.addr_id, 
+	   		  street, city, state, zip, country
+  	   FROM students s 
+  	   LEFT OUTER JOIN addresses a 
+       ON s.addr_id=a.addr_id
+       WHERE s.stud_id=#{stud_id}
+     --> 
+    <!--************* case3 ***************--> 
+  	<select id="findStudentByIdWithAddress" 
+			parameterType="int"
+			resultMap="studentWithAddressResult"
+			>
+	   SELECT stud_id, name, email,phone, a.addr_id, 
+	   		  street, city, state, zip, country
+  	   FROM students s 
+  	   LEFT OUTER JOIN addresses a 
+       ON s.addr_id=a.addr_id
+       WHERE s.stud_id=#{stud_id}
+ 	</select>
+ 	<!--************* case4 ***************-->
+ 	
+ 	<select id="findStudentByIdNestedfindAddressById" 
+ 			parameterType="int"
+ 			resultMap="studentWithAddressNestedSelectResult"
+ 			>
+ 			SELECT STUD_ID,NAME,EMAIL,DOB,ADDR_ID
+ 			FROM STUDENTS
+ 			WHERE
+ 			STUD_ID=#{STUD_ID}
+ 	
+ 	</select> 
+ 	<select id="findStudentCount" resultType="int">
+ 		SELECT COUNT(*) AS student_count
+ 		FROM STUDENTS
+ 	</select>
+</mapper>
+
+
+
+
+
+
+
+
