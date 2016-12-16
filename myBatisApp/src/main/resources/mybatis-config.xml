@@ -5,16 +5,14 @@
 <configuration>
 
 	  <properties resource="jdbc.properties"/>
-	  <!-- 
-	  <settings>
+	  
+	  <!-- <settings>
 	  	<setting name="" value=""/>
-	  </settings>
-	   -->
+	  </settings> -->
+	  
 	  <typeAliases>
-	    <typeAlias type="com.mybatis3.domain.Student" alias="student"/>
+	    <typeAlias type="com.mybatis3.domain.Student" alias="Student"/>
 	    <typeAlias type="java.lang.Integer" alias="int"/>
-	  	
-	  	<package name="com.mybatis3.domain"/>
 	  </typeAliases>
 		
 	  <environments default="development">
@@ -29,18 +27,14 @@
 	    </environment>
 	  </environments>
 	  
-	  <mappers>
-	   
-	    <mapper class="com.mybatis3.mappers.StudentMapper"/>
-	   
-	    
-	    <!-- 
+	  <mappers> <!-- SQL 매핑하는 xml -->
 	    <mapper resource="com/mybatis3/mappers/StudentMapper.xml"/>
-	    -->
 	    <mapper resource="com/mybatis3/mappers/AddressMapper.xml"/>
+	    <!-- 	   
+	    <mapper class="com.mybatis3.mappers.StudentMapper"/>	    
 	    <mapper resource="com/mybatis3/mappers/TutorMapper.xml"/>
 	    <mapper resource="com/mybatis3/mappers/CourseMapper.xml"/>
-	   
+	    -->
 	  </mappers>
   	
   	

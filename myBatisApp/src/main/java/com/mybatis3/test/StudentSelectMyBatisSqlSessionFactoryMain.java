@@ -16,7 +16,13 @@ public class StudentSelectMyBatisSqlSessionFactoryMain {
 		
 		
 		/*********MyBatisSqlSessionFactory 의사용*****************/
+		SqlSession sqlSession =  MyBatisSqlSessionFactory.getSqlSession();
 		
+		String NAMESPACE="com.mybatis3.mappsers.StudentMapper.";
+		Student findStudent = sqlSession.selectOne(NAMESPACE+"findStudentById", 4);
+		System.out.println(">>>>"+findStudent);
+		
+		System.out.println(">>>>"+sqlSession.selectOne(NAMESPACE+"findStudentById",2));
 		/***************************************/
 		
 	}
