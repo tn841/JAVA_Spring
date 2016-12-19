@@ -30,6 +30,13 @@ public class StudentDao {
 		sqlSession.close();
 		return updateRows;
 	}
+	public int updateStudentDynamicSql(Student student){
+		SqlSession sqlSession = MyBatisSqlSessionFactory.getSqlSession();
+		int updateRows = sqlSession.update(namespace+"updateStudentDynamicSql", student);
+		sqlSession.commit();
+		sqlSession.close();
+		return updateRows;
+	}
 	
 	
 	public int insertStudent(Student student){

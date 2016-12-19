@@ -98,6 +98,14 @@ public class StudentDaoMain {
 		System.out.println();
 		
 		System.out.println("-------------updateStudentDynamicSql-----------");
+		Student stud1 = new Student(1, "Lee", null, new Date());
+		Student stud2 = new Student(2, null, null, new Date());
+		Student stud3 = new Student(3, "Hong", "Hong@naver.com", null);
+		
+		studentDao.updateStudentDynamicSql(stud1);
+		studentDao.updateStudentDynamicSql(stud2);
+		studentDao.updateStudentDynamicSql(stud3);
+		
 		System.out.println();
 		System.out.println();
 		}

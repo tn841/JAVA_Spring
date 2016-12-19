@@ -138,6 +138,27 @@
 		WHERE
 		STUD_ID = #{STUD_ID}
 	</select>
+	
+	
+	<!-- Dynamic SQL -->
+		<!-- update -->
+	<update id="updateStudentDynamicSql"
+			parameterType="Student">
+			<!-- 파라미터에 데이터가 있는 경우만 해당 column을 update한다. -->
+			UPDATE STUDENTS
+			SET
+			<if test="name!=null">
+				NAME = #{name},
+			</if>
+			<if test="email!=null">
+				EMAIL = #{email},
+			</if>
+			<if test="dob!=null">
+				DOB = #{dob}
+			</if>
+			WHERE
+			STUD_ID = #{studId}
+	</update>
 </mapper>
 
 
