@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="com.mybatis3.mappsers.StudentMapper">
+<mapper namespace="com.mybatis3.mappers.StudentMapper">
 	<!-- resultMap -->
 	<resultMap id="studentResult" type="com.mybatis3.domain.Student" >
 		<result column="STUD_ID" property="studId"/>
@@ -146,18 +146,23 @@
 			parameterType="Student">
 			<!-- 파라미터에 데이터가 있는 경우만 해당 column을 update한다. -->
 			UPDATE STUDENTS
-			SET
-			<if test="name!=null">
-				NAME = #{name},
-			</if>
-			<if test="email!=null">
-				EMAIL = #{email},
-			</if>
-			<if test="dob!=null">
-				DOB = #{dob}
-			</if>
-			WHERE
-			STUD_ID = #{studId}
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="name!=null">
+					NAME = #{name},
+				</if>
+				<if test="email!=null">
+					EMAIL = #{email},
+				</if>
+				<if test="dob!=null">
+					DOB = #{dob}
+				</if>
+			</trim>
+			
+			<where>
+				<if test="studId!=null">
+					STUD_ID = #{studId}
+				</if>
+			</where>
 	</update>
 </mapper>
 

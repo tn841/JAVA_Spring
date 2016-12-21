@@ -101,10 +101,12 @@ public class StudentDaoMain {
 		Student stud1 = new Student(1, "Lee", null, new Date());
 		Student stud2 = new Student(2, null, null, new Date());
 		Student stud3 = new Student(3, "Hong", "Hong@naver.com", null);
+		Student stud4 = new Student(null, null, null, null);
 		
 		studentDao.updateStudentDynamicSql(stud1);
 		studentDao.updateStudentDynamicSql(stud2);
 		studentDao.updateStudentDynamicSql(stud3);
+		//studentDao.updateStudentDynamicSql(stud4);
 		
 		System.out.println();
 		System.out.println();

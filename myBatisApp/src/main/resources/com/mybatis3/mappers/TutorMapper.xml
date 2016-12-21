@@ -4,53 +4,52 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.mybatis3.mappers.TutorMapper">
-	<resultMap 
-		type="com.mybatis3.domain.Tutor" 
-		id="tutorWithCoursesAndAddressResult">
-		<id property="tutorId" column="TUTOR_ID"/>
-		<result property="name" column="TUTOR_NAME"/>
-		<result property="email" column="EMAIL"/>
-		<association property="address" 
-					 resultMap="com.mybatis3.mappers.AddressMapper.addressResult"/>
-    	<collection property="courses" 
-    				resultMap="com.mybatis3.mappers.CourseMapper.courseResult"/>
-    </resultMap>
-	
-	<resultMap 
-			type="com.mybatis3.domain.Tutor" 
-			id="tutorNestedSelectResult">
-		<id property="tutorId" column="TUTOR_ID"/>
-		<result property="name" column="TUTOR_NAME"/>
-		<result property="email" column="EMAIL"/>
-		<association property="address"
-					 select="com.mybatis3.mappers.AddressMapper.findAddressById"
-					 column="ADDR_ID"
-					 />
-    	<collection property="courses" 
-    				 select="com.mybatis3.mappers.CourseMapper.findCoursesByTutorId"
-    				column="TUTOR_ID"
-    				/>
+	<resultMap 	id="tutorWithCoursesResult" 
+				type="com.mybatis3.domain.Tutor"><!-- type이 tutor인 이유는 tutor DTO에 course를 멤버변수로 해놓았기 때문 -->
+			<id column="TUTOR_ID" property="tutorId"/>
+			<result column="TUTOR_NAME" property="name"/>
+			<result column="EMAIL" property="email"/>
+			<association property="address" resultMap="com.mybatis3.mappers.AddressMapper.addressResult"/>
+			<collection resultMap="com.mybatis3.mappers.CourseMapper.courseResult" property="courses"/>	<!-- course 정보를 담을 collection -->
 	</resultMap>
+	
+	<resultMap id="tutorNestedSelectResult" type="com.mybatis3.domain.Tutor">
+		<id column="TUTOR_ID" property="tutorId"/>
+		<result column="NAME" property="name"/>
+		<result column="EMAIL" property="email"/>
+		<association column="ADDR_ID" property="address" select="com.mybatis3.mappers.AddressMapper.findAddressById"/>
+		<collection column="TUTOR_ID" property="courses" select="com.mybatis3.mappers.CourseMapper.findCoursesByTutorId"/>
+	</resultMap>
+	
 	<select id="selectTutorById"
 			parameterType="int"
-			resultMap="tutorWithCoursesAndAddressResult">
-	  SELECT t.tutor_id, t.name as tutor_name, email,
-			 a.addr_id, street, city, state, zip, country,
-       		 course_id, c.name, description, start_date, end_date
-      FROM 
-      tutors t LEFT OUTER JOIN addresses a 
-      ON t.addr_id=a.addr_id
-	  LEFT OUTER JOIN courses c 
-	  ON t.tutor_id=c.tutor_id
-      WHERE t.tutor_id=#{TUTOR_ID} 
-	</select>
+			resultMap="tutorWithCoursesResult">
+		SELECT t.tutor_id, t.name as tutor_name, email,course_id, c.name, description, start_date, end_date
+	    FROM tutors t 
+	    left outer join courses c 
+	    on t.tutor_id=c.tutor_id
+	    where t.tutor_id= #{tutor_id}
+	</select>	
+	<select id="selectTutorByIdWithAddr"
+			parameterType="int"
+			resultMap="tutorWithCoursesResult">
+		SELECT t.tutor_id, t.name as tutor_name, email, a.addr_id, street, city, state, zip, country,
+       			course_id, c.name, description, start_date, end_date
+      	FROM tutors t 
+      	left outer join addresses a 
+      	on t.addr_id=a.addr_id
+	  	left outer join courses c on t.tutor_id=c.tutor_id
+      	where t.tutor_id=#{tutor_id}   
+	</select>	
+	
 	<select id="nestedSelectTutorById"
 			parameterType="int"
 			resultMap="tutorNestedSelectResult">
-		SELECT TUTOR_ID,NAME,EMAIL,ADDR_ID
+		SELECT TUTOR_ID, NAME, EMAIL, ADDR_ID
 		FROM TUTORS
-		WHERE TUTOR_ID=#{TUTOR_ID}
+		WHERE TUTOR_ID = #{asdlfansdf}
 	</select>
+	
 	
 </mapper>
 

@@ -15,7 +15,7 @@ public class Tutor implements Serializable
 	private String name;
 	private String email;
 	private Address address;
-	private List<Course> courses;
+	private List<Course> courses;	//tutor는 여러개의 course를 가질 수 있다. (사용자가 DTO에서 이렇게 정의하였다.)
 	
 	@Override
 	public String toString() {

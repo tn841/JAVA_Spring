@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.mybatis3.domain.Student;
+import com.mybatis3.mappers.StudentMapper;
 
 public class StudentSelectSqlSessionMain {
 
@@ -38,6 +39,9 @@ public class StudentSelectSqlSessionMain {
 		/*
 		 * 4.SqlSession사용
 		 */
+		StudentMapper sm=ss.getMapper(StudentMapper.class);
+		System.out.println(">> sm : "+sm);
+		
 		Student findStd = ss.selectOne("com.mybatis3.mappsers.StudentMapper.findStudentById", 1);
 		System.out.println(">> findStd : "+findStd);
 

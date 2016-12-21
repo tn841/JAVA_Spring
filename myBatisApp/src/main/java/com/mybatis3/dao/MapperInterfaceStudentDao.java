@@ -9,7 +9,14 @@ import com.mybatis3.mappers.StudentMapper;
 import com.mybatis3.util.MyBatisSqlSessionFactory;
 
 public class MapperInterfaceStudentDao {
-	
+/*
+	public Student findStudentById(int sid) {
+		SqlSession sqlSession=MyBatisSqlSessionFactory.getSqlSession();
+		//Student findStudent=sqlSession.selectOne(namespace+"findStudentById",studId);
+		StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+		return studentMapper.findStudentById(sid);
+	}
+	*/
 }
 
 

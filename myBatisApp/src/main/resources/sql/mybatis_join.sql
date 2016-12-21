@@ -30,7 +30,8 @@ SELECT t.tutor_id, t.name as tutor_name, email,course_id, c.name, description, s
 SELECT t.tutor_id, t.name as tutor_name, email,course_id, c.name, description, start_date, end_date
       FROM tutors t 
       left outer join courses c 
-      on t.tutor_id=c.tutor_id;
+      on t.tutor_id=c.tutor_id
+      where t.tutor_id=1;
       
       
       
