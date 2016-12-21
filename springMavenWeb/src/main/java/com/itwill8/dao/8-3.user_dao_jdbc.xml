@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+		
+	<!-- apache datasource -->
+	<bean id="apacheDataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@210.16.214.203:1521:xe"/>
+		<property name="username" value="user21"/>
+		<property name="password" value="user21"/>
+	</bean>
+	
+	<!-- spring datasource -->
+	<bean 	id="springDataSource" 
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+			p:driverClassName="oracle.jdbc.driver.OracleDriver"
+			p:url="jdbc:oracle:thin:@210.16.214.203:1521:xe"
+			p:username="user21"
+			p:password="user21"/>
+	
+
+	
+	<!-- jdbc Template -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="apacheDataSource"></property>
+	</bean>
+	
+	<!-- UserDao -->
+	<bean id="userDao" class="com.itwill.user.UserDaoImplSpringDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+
+</beans>
+
+
+
+
