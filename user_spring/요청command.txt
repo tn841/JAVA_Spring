@@ -1,0 +1,11 @@
+/user_main				com.itwill.user.controller.UserMainController
+/user_write_form		com.itwill.user.controller.UserWriteFormController
+/user_write_action		com.itwill.user.controller.UserWriteActionController
+/user_login_form		com.itwill.user.controller.UserLoginFormController
+/user_login_action		com.itwill.user.controller.UserLoginActionController
+/user_logout_action		com.itwill.user.controller.UserLogoutActionController
+/user_list				com.itwill.user.controller.UserListController
+/user_view				com.itwill.user.controller.UserViewController
+/user_remove_action		com.itwill.user.controller.UserRemoveActionController
+/user_modify_form		com.itwill.user.controller.UserModifyFormController
+/user_modify_action		com.itwill.user.controller.UserModifyActionController

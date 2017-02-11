@@ -1,0 +1,9 @@
+- pom.xml  자바컴파일러버젼변경
+- pom.xml  log4j dependency설정
+- log4j.xml 파일 클래스패스에위치
+- pom.xml  DataSource 를위한 dependency설정
+- pom.xml  Oracle Driver 를위한 dependency설정(repository)
+
+
+
+  

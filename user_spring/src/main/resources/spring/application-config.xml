@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+				
+
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	
+	
+	
+
+
+	<!-- 반복 Task 지정 -->
+	<task:scheduler id="scheduler" pool-size="10"/>
+	<task:executor id="taskExecutor" pool-size="10"/>
+	<task:annotation-driven executor="taskExecutor" scheduler="scheduler"/>
+	<bean id="repeatTask" class="com.itwill.task.RepeatTask"/>
+	 
+			
+		
+    <!-- jdbc.properties 파일로딩 -->
+    <context:property-placeholder location="classpath:db/jdbc.properties"/>
+     
+    <!-- DataSource설정 -->
+    <bean id="springDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    	<property name="driverClassName" value="${jdbc.driverClassName}"/>
+    	<property name="url" value="${jdbc.url}"/>
+    	<property name="username" value="${jdbc.username}"/>
+    	<property name="password" value="${jdbc.password}"/>
+    </bean>
+    
+    <!-- JdbTemplate설정 -->
+   <!--  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+   		<property name="dataSource" ref="springDataSource"/>
+   	</bean> -->
+   	
+   	
+   	<!-- sqlSessionFactory[Mybatis] -->
+   	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+   		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+   		<property name="dataSource" ref="springDataSource"/>
+   		<property name="mapperLocations">
+   			<list>
+   				<value>classpath:mybatis/UserMapper.xml</value>
+   			</list>
+   		</property>
+   	</bean>
+   	
+   	<!-- SqlSession[Mybatis] 
+   	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+   		<constructor-arg ref="sqlSessionFactory"/>
+   	</bean>-->
+    
+    <!-- UserDao (sqlSession이용)
+    <bean id="userDao" class="com.itwill.user.UserDaoImplMyBatis" >
+   		<property name="sqlSession"  ref="sqlSession"/>
+   	</bean> -->
+   	
+   	 <!-- UserMapper[MapperFactoryBean] -->
+	 <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	 	<property name="mapperInterface" value="com.itwill.user.UserMapper"/>
+	 	<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	 </bean>
+   	
+   	 <!-- UserDao (interface) -->
+	 <bean id="userDao" class="com.itwill.user.UserDaoImplMyBatis">
+	 	<property name="userMapper" ref="userMapper"/> <!-- DI -->
+	 </bean>
+    
+    <!-- UserService 선언 -->
+    <bean id="userService" class="com.itwill.user.UserServiceImpl">
+    	<property name="userDao" ref="userDao"/>
+    </bean>
+</beans>
