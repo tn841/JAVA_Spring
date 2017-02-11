@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- Uncomment and add your base-package here:
+         <context:component-scan
+            base-package="org.springframework.samples.service"/>  -->
+	
+	
+	<!-- apache datasource -->
+	<bean id="apacheDataSource" 
+			class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@210.16.214.203:1521:XE"/>
+		<property name="username" value="user21"/>
+		<property name="password" value="user21"/>
+	</bean>
+
+	<!-- SqlSessionFactory[Mybatis] -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" /><!-- mybatis 설정 로딩 -->
+		<property name="dataSource" ref="apacheDataSource"/>	<!-- DataSource 의존성 주입 -->
+		<property name="mapperLocations">	<!-- Mapper.xml 로딩 -->
+			<list>
+				<value>classpath:mybatis/RealtimeMapper.xml</value>
+				<value>classpath:mybatis/MemberMapper.xml</value>
+				<value>classpath:mybatis/FavoriteMapper.xml</value>
+				<value>classpath:mybatis/NewsMapper.xml</value>
+			</list>
+		</property>
+		<!-- <property name="typeAliases"></property> alias도 여기서 줄 수 있다. --> 
+	</bean>
+	
+</beans>

@@ -1,0 +1,52 @@
+package com.post_trend.realtime;
+
+import java.util.ArrayList;
+
+import com.post_trend.mapper.RealtimeMapper;
+
+public class RealTimeImpl implements RealTimeDao{
+	
+	
+	private RealtimeMapper realtimeMapper;
+	
+	
+	public RealtimeMapper getRealtimeMapper() {
+		return realtimeMapper;
+	}
+
+	public void setRealtimeMapper(RealtimeMapper realtimeMapper) {
+		this.realtimeMapper = realtimeMapper;
+		System.out.println("** setRealtimeMapper() **");
+	}
+
+	@Override
+	public int create(Realtime realtime) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int remove(int realtime_no) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(Realtime realtime, int realtime_no) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int delete(int realtime_no) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ArrayList<Realtime> findByStandard(String standard) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

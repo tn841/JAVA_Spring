@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.post_trend.mapper.NewsMapper">
+<!-- resultMap 
+ <resultMap type="News" id="NewsResultMap">
+	<id property="news_no" column="NEWS_NO"/>  
+	<result property="headline" column="HEADLINE"/>
+	<result property="news_date" column="NEW_DATE"/>
+	<collection property="news_keywordList" ofType="Keyword">
+		<id property="keyword_no" column="KEY_NO"/>
+		<result property="keywordFrag" column="KEYWORD"/>
+	</collection>
+  </resultMap>
+  -->
+  <resultMap type="News" id="NewsResultMap">
+	<id property="news_no" column="NEWS_NO"/>  
+	<result property="news_date" column="NEW_DATE"/>
+	<result property="news_company" column="NEW_COMPANY"/>
+  </resultMap>
+  <resultMap type="Keyword" id="KeywordResultMap">
+  	<id property="keyword_no" column="KEYWORD_NO"/>
+  	<result property="keywordFrag" column="KEYWORDFRAG"/>
+  </resultMap>
+  
+  <resultMap type="Keyword" id="NewsJoin">
+  	<id property="keyword_no" column="KEYWORD_NO"/>
+  	<result property="keywordFrag" column="KEYWORDFRAG"/>
+  	<result property="news_no" column="NEWS_NO"/>
+  	<association property="news" javaType="News" resultMap="NewsResultMap"/>
+  </resultMap>
+  
+  <resultMap type="News" id="KeywordList">
+  	<id property="news_no" column="NEWS_NO"/>  
+	<result property="news_date" column="NEW_DATE"/>
+	<collection property="news_keywordList" ofType="Keyword">
+		<id property="keyword_no" column="KEY_NO"/>
+		<result property="keywordFrag" column="KEYWORD"/>
+	</collection>
+  </resultMap>
+  
+  
+  
+  
+  
+  
+  <!--  ******************************************      -->
+  <!-- 
+	  	이름            널        유형            
+	************************************
+	NEWS_NO       NOT NULL NUMBER(20)    
+	NEWS_HEADLINE          VARCHAR2(200) 
+	NEWS_KEYWORDS          VARCHAR2(20)  
+	NEWS_DATE              DATE          
+	NEWS_COMPANY           VARCHAR2(20) 
+   -->
+  <select id="newsFindOne" parameterType="int" resultMap="NewsResultMap">
+  		SELECT * FROM NEWS WHERE NEWS_NO = #{news_no}
+  </select>
+  
+  <select id="newsFindLatestNews" parameterType="String" resultMap="NewsResultMap">
+  	SELECT ROWNUM , N.NEWS_NO, N.NEWS_DATE, N.NEWS_COMPANY
+	FROM (SELECT NEWS_NO,NEWS_DATE,NEWS_COMPANY FROM NEWS 
+	      WHERE NEWS_COMPANY LIKE #{NEWS_COMPANY}
+	      ORDER BY NEWS_NO DESC
+	      )N
+	WHERE ROWNUM=1
+  </select>
+  <select id="newsWithKeywordByNo" parameterType="Keyword" resultMap="KeywordList">
+  	select * 
+	from keyword k join news n
+	on n.news_no=k.news_no
+	where n.news_no=#{news_no}
+  </select>
+  
+  <select id="newsFindKeywordList" resultType="Keyword">
+  	SELECT * FROM KEYWORD WHERE NEWS_NO=#{NEWS_NO}
+  </select>
+  
+   
+  <insert id="newsInsert" parameterType="News" >
+  	<selectKey keyProperty="news_no" order="BEFORE" resultType="int" >
+  		SELECT NEWS_NO_SEQ.NEXTVAL FROM DUAL
+  	</selectKey>
+  	INSERT INTO NEWS 
+  	VALUES(#{news_no},#{news_date},#{news_company})
+  </insert>
+    
+  <insert id="keywordInsert" parameterType="com.post_trend.news.NewsKeyword">
+  	<selectKey keyProperty="keyword_no" order="BEFORE" resultType="int">
+  		SELECT KEY_NO_SEQ.NEXTVAL FROM DUAL
+  	</selectKey>
+  	INSERT INTO KEYWORD
+  	VALUES(#{keyword_no},#{keywordFrag},#{news_no})
+  </insert>
+</mapper>

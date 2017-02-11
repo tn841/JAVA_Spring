@@ -1,0 +1,8 @@
+package com.post_trend.mapper;
+
+import com.post_trend.realtime.Realtime;
+
+public interface RealtimeMapper {
+	public int create(Realtime realtime);
+
+}

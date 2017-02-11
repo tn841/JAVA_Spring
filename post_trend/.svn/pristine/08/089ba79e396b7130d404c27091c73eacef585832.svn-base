@@ -1,0 +1,13 @@
+package com.post_trend.news;
+
+import java.util.ArrayList;
+
+public interface NewsDao {
+	public int newsInsert();
+	public int newsUpdate();
+	public int newsRemove();
+	public News newsFindOne();
+	public ArrayList<News> newsFindList();
+	  
+	 
+}

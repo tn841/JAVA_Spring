@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- Uncomment and add your base-package here:
+         <context:component-scan
+            base-package="org.springframework.samples.service"/>  -->
+		<!-- UserMapper[MapperFactoryBean] -->
+	 <bean id="realtimeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	 	<property name="mapperInterface" value="com.post_trend.mapper.RealtimeMapper"/>
+	 	<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	 </bean>
+	
+	
+	<bean id="realtimeDao" class="com.post_trend.realtime.RealTimeDaoImpl">
+		<property name="realtimeMapper" ref="realtimeMapper"></property>
+	</bean>
+	
+	
+	<!-- Controller -->
+	<bean id="realtimeController" class="com.post_trend.controller.RealtimeContorller">
+		<property name="realTimeDao" ref="realtimeDao"></property>
+	</bean>
+	
+	
+	<!-- URL Mapping (@Controller 어노테이션 안쓸 경우) -->
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/realtime_create.do">realtimeController</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+</beans>

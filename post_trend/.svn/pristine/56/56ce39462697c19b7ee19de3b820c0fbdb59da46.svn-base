@@ -1,0 +1,61 @@
+package com.post_trend.news;
+
+import java.sql.Date;
+import java.util.ArrayList;
+
+public class News {
+	private int news_no;
+	private String headline;
+	private ArrayList<NewsKeyword> news_keyword;
+	private Date news_date;
+	private int news_company;
+	//private boolean isPositive;
+	
+	/*-----------------------*/
+	static final int CHOSEON = 0;
+	static final int HANGYEREA = 1;
+	static final int JOONGANG = 2;
+	/*-----------------------*/
+	public News() {
+		// TODO Auto-generated constructor stub
+	}
+	public News(int news_no, String headline, ArrayList<NewsKeyword> news_keyword, Date news_date, int news_company) {
+		super();
+		this.news_no = news_no;
+		this.headline = headline;
+		this.news_keyword = news_keyword;
+		this.news_date = news_date;
+		this.news_company = news_company;
+	}
+	public int getNews_no() {
+		return news_no;
+	}
+	public void setNews_no(int news_no) {
+		this.news_no = news_no;
+	}
+	public String getHeadline() {
+		return headline;
+	}
+	public void setHeadline(String headline) {
+		this.headline = headline;
+	}
+	public ArrayList<NewsKeyword> getNews_keyword() {
+		return news_keyword;
+	}
+	public void setNews_keyword(ArrayList<NewsKeyword> news_keyword) {
+		this.news_keyword = news_keyword;
+	}
+	public Date getNews_date() {
+		return news_date;
+	}
+	public void setNews_date(Date news_date) {
+		this.news_date = news_date;
+	}
+	public int getNews_company() {
+		return news_company;
+	}
+	public void setNews_company(int news_company) {
+		this.news_company = news_company;
+	}
+	
+}

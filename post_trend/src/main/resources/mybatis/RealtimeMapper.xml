@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.post_trend.mapper.RealtimeMapper">
+	<!-- resultMap -->
+	<resultMap id="realtimeResult" type="com.post_trend.realtime.Realtime" >
+		<result property="realtime_no" column="realtime_no" />
+		<result property="realtime_keyword" column="realtime_keyword" />
+		<result property="realtime_url" column="realtime_url" />
+		<result property="realtime_rank" column="realtime_rank" />
+		<result property="realtime_standard" column="realtime_standard" />
+		<result property="realtime_portal" column="realtime_portal" />
+		<result property="realtime_isIncrease" column="realtime_isIncrease" />
+		<result property="realtime_degree" column="realtime_degree" />
+		<result property="realtime_timestamp" column="realtime_timestamp" />
+	</resultMap>
+	
+	<!-- select -->
+	<!-- 
+		최근 20개
+		select *  
+		from (select * from Realtime order by REALTIME_TIMESTAMP desc ) 
+		where rownum <21  order by realtime_no; 
+	-->
+	<select id="select_naver_realtime"
+			resultMap="realtimeResult">
+		SELECT *
+		FROM (SELECT * FROM REALTIME ORDER BY REALTIME_TIMESTAMP DESC)
+		WHERE ROWNUM &lt; 21 AND Realtime_portal LIKE '%네이버%' ORDER BY REALTIME_NO
+	</select>
+	
+	<select id="select_daum_realtime"
+			resultMap="realtimeResult">
+		SELECT *
+		FROM (SELECT * FROM REALTIME ORDER BY REALTIME_TIMESTAMP DESC)
+		WHERE ROWNUM &lt; 11 AND Realtime_portal LIKE '%다음%' ORDER BY REALTIME_NO
+	</select>
+	
+	<!-- insert -->
+	<insert id="create"
+			parameterType="RealTime">
+			
+			<selectKey keyProperty="realtime_no" order="BEFORE" resultType="int">
+				SELECT REALTIME_NO_SEQ.nextval FROM DUAL
+			</selectKey>
+			INSERT INTO REALTIME
+			VALUES(#{realtime_no}, 
+					#{realtime_keyword}, 
+					#{realtime_url}, 
+					#{realtime_rank}, 
+					#{realtime_standard}, 
+					#{realtime_portal},
+					#{realtime_isIncrease},
+					#{realtime_degree}, 
+					CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- ( REALTIME_NO_SEQ.nextval, 'keyword', 'url', 0, 'standard', 'portal', CURRENT_TIMESTAMP) -->
+</mapper>

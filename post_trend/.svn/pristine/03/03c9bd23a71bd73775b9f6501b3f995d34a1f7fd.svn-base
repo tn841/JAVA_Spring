@@ -1,0 +1,5 @@
+package com.post_trend.mapper;
+
+public interface NewsMapper {
+	
+}

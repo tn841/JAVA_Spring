@@ -1,0 +1,58 @@
+package com.post_trend.task;
+
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.post_trend.realtime.RealTimeDaoImpl;
+import com.post_trend.realtime.Realtime;
+
+//@Service
+public class RealtimeCrawling {
+	
+	@Autowired
+	RealTimeDaoImpl realTimeDao;
+	
+	public RealtimeCrawling() {
+		System.out.println("Controller 생성자");
+	}
+
+	public void setRealTimeDao(RealTimeDaoImpl realTimeDao) {
+		this.realTimeDao = realTimeDao;
+		System.out.println("** setRealTimeDao : "+realTimeDao);
+	}
+	
+	
+	@Scheduled(cron = "*/5 * * * * *")
+	public void crawling(){
+		
+		Realtime newRealt=null;
+		try {
+			Document document = Jsoup.connect("http://naver.com").get();
+			Elements rank_list = document.select("#ranklist ol li");
+			
+			Elements rank_time = document.select(".rank_time ");
+			String rank_time_str = rank_time.toString();
+			int start, end;
+			start = rank_time_str.indexOf(">");
+			end = rank_time_str.indexOf("기준");
+			String crawlingStd = rank_time_str.substring(start+1, end-1);
+			
+			System.out.println("rank_list : "+rank_list);
+			System.out.println("rank_time : "+crawlingStd);
+			newRealt = new Realtime("keyword1", "url1", 3, crawlingStd, "portal1");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("** create row  : "+realTimeDao.create(newRealt));
+	}
+
+}

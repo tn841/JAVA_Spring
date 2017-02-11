@@ -1,0 +1,35 @@
+DROP TABLE keyword CASCADE CONSTRAINTS;
+DROP TABLE news CASCADE CONSTRAINTS;
+
+
+/**********************************/
+/* Table Name: news */
+/**********************************/
+CREATE TABLE news(
+		news_no                       		NUMBER(10)		 NOT NULL,
+		news_date                     		VARCHAR2(20)		 NULL ,
+		news_company                  		VARCHAR2(20)		 NULL 
+);
+
+DROP SEQUENCE news_no_SEQ;
+
+CREATE SEQUENCE news_no_SEQ NOMAXVALUE NOCACHE NOORDER NOCYCLE;
+
+
+
+/**********************************/
+/* Table Name: keyword */
+/**********************************/
+CREATE TABLE keyword(
+		keyword_no                    		NUMBER(10)		 NOT NULL,
+		keywordfrag                   		VARCHAR2(30)		 NULL ,
+		news_no                       		NUMBER(10)		 NULL 
+);
+
+DROP SEQUENCE keyword_no_SEQ;
+
+CREATE SEQUENCE keyword_no_SEQ NOMAXVALUE NOCACHE NOORDER NOCYCLE;
+
+ALTER TABLE news ADD CONSTRAINT IDX_news_PK PRIMARY KEY (news_no);
+ALTER TABLE keyword ADD CONSTRAINT IDX_keyword_PK PRIMARY KEY (keyword_no);
+ALTER TABLE keyword ADD CONSTRAINT IDX_keyword_FK0 FOREIGN KEY (news_no) REFERENCES news (news_no);

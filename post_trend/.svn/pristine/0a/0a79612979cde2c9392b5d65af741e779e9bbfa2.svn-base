@@ -1,0 +1,32 @@
+package com.post_trend.news;
+
+import java.util.ArrayList;
+
+public class NewsDaoImpl implements NewsDao {
+
+	@Override
+	public int newsInsert() {
+		return 0;
+	}
+
+	@Override
+	public int newsUpdate() {
+		return 0;
+	}
+
+	@Override
+	public int newsRemove() {
+		return 0;
+	}
+
+	@Override
+	public News newsFindOne() {
+		return null;
+	}
+
+	@Override
+	public ArrayList<News> newsFindList() {
+		return null;
+	}
+
+}

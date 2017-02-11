@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- Uncomment and add your base-package here:
+         <context:component-scan
+            base-package="org.springframework.samples.service"/>  -->
+		<!-- UserMapper[MapperFactoryBean] -->
+	<!-- apache datasource -->
+	
+	<bean id="newsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.post_trend.mapper.NewsMapper"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
+	
+	<bean id="newsDao" class="com.post_trend.news.NewsDaoImpl">
+		<property name="newsMapper" ref="newsMapper"/>
+	</bean>
+	<bean id="newsSerivce" class="com.post_trend.news.NewsServiceImpl">
+		<property name="newsDao" ref="newsDao"/>
+	</bean>
+	
+	<!-- task scheduler (반복할 Task 지정) -->
+	<!-- 
+	이거는 context에 한개만 필요해 두개면 에러 	
+	<task:scheduler id="scheduler" pool-size="10"/> 
+	<task:executor id="taskExecutor" pool-size="10"/> 
+ 	<task:annotation-driven executor="taskExecutor" scheduler="scheduler"/> 
+ 	-->
+	<bean id="newsCrawling" class="com.post_trend.task.NewsCrawling">
+		<property name="newsService" ref="newsSerivce"/>
+	</bean>
+	
+</beans>

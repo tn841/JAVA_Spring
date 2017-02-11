@@ -1,0 +1,151 @@
+DROP TABLE 음악 CASCADE CONSTRAINTS;
+DROP TABLE 영화 CASCADE CONSTRAINTS;
+DROP TABLE 실시간검색어 CASCADE CONSTRAINTS;
+DROP TABLE 뉴스 CASCADE CONSTRAINTS;
+DROP TABLE 회원 CASCADE CONSTRAINTS;
+DROP TABLE 즐겨찾기 CASCADE CONSTRAINTS;
+
+/**********************************/
+/* Table Name: favorite */
+/**********************************/
+CREATE TABLE 즐겨찾기(
+		즐겨찾기번호                        		NUMBER(15)		 NOT NULL,
+		회원번호_f                        		NUMBER(15)		 NULL ,
+		뉴스즐겨찾기                        		NUMBER(10)		 NULL ,
+		실검즐겨찾기                        		NUMBER(10)		 NULL ,
+		영화즐겨찾기                        		NUMBER(10)		 NULL ,
+		음악즐겨찾기                        		NUMBER(10)		 NULL 
+);
+
+COMMENT ON TABLE 즐겨찾기 is 'favorite';
+COMMENT ON COLUMN 즐겨찾기.즐겨찾기번호 is 'favorite_no';
+COMMENT ON COLUMN 즐겨찾기.회원번호_f is 'member_no_f';
+COMMENT ON COLUMN 즐겨찾기.뉴스즐겨찾기 is 'favorite_news';
+COMMENT ON COLUMN 즐겨찾기.실검즐겨찾기 is 'favorite_realtime';
+COMMENT ON COLUMN 즐겨찾기.영화즐겨찾기 is 'favotire_movie';
+COMMENT ON COLUMN 즐겨찾기.음악즐겨찾기 is 'favorite_music';
+
+
+/**********************************/
+/* Table Name: member */
+/**********************************/
+CREATE TABLE 회원(
+		회원번호                          		NUMBER(10)		 NOT NULL,
+		회원아이디                         		VARCHAR2(50)		 NULL ,
+		회원비밀번호                        		VARCHAR2(50)		 NULL ,
+		회원이름                          		VARCHAR2(50)		 NULL ,
+		회원나이                          		NUMBER(10)		 NULL ,
+		회원성별                          		VARCHAR2(10)		 NULL ,
+		회원이메일                         		VARCHAR2(50)		 NULL ,
+		회원직업                          		VARCHAR2(20)		 NULL ,
+		회원결혼여부                        		NUMBER(10)		 NULL ,
+		즐겨찾기번호                        		NUMBER(15)		 NULL 
+);
+
+COMMENT ON TABLE 회원 is 'member';
+COMMENT ON COLUMN 회원.회원번호 is 'member_no';
+COMMENT ON COLUMN 회원.회원아이디 is 'member_id';
+COMMENT ON COLUMN 회원.회원비밀번호 is 'member_pw';
+COMMENT ON COLUMN 회원.회원이름 is 'member_name';
+COMMENT ON COLUMN 회원.회원나이 is 'member_age';
+COMMENT ON COLUMN 회원.회원성별 is 'member_gender';
+COMMENT ON COLUMN 회원.회원이메일 is 'member_email';
+COMMENT ON COLUMN 회원.회원직업 is 'member_job';
+COMMENT ON COLUMN 회원.회원결혼여부 is 'member_married';
+COMMENT ON COLUMN 회원.즐겨찾기번호 is 'favorite_no';
+
+
+/**********************************/
+/* Table Name: news */
+/**********************************/
+CREATE TABLE 뉴스(
+		뉴스번호                          		NUMBER(20)		 NOT NULL,
+		뉴스타이틀                         		VARCHAR2(200)		 NULL ,
+		뉴스기자                          		VARCHAR2(20)		 NULL ,
+		뉴스작성일                         		DATE		 NULL ,
+		뉴스출처                          		VARCHAR2(20)		 NULL 
+);
+
+COMMENT ON TABLE 뉴스 is 'news';
+COMMENT ON COLUMN 뉴스.뉴스번호 is 'news_no';
+COMMENT ON COLUMN 뉴스.뉴스타이틀 is 'news_title';
+COMMENT ON COLUMN 뉴스.뉴스기자 is 'news_editor';
+COMMENT ON COLUMN 뉴스.뉴스작성일 is 'news_date';
+COMMENT ON COLUMN 뉴스.뉴스출처 is 'news_provider';
+
+
+/**********************************/
+/* Table Name: realtime */
+/**********************************/
+CREATE TABLE 실시간검색어(
+		실검번호                          		NUMBER(10)		 NOT NULL,
+		실검키워드                         		VARCHAR2(100)		 NULL ,
+		실검url                         		VARCHAR2(200)		 NULL ,
+		실검순위                          		NUMBER(10)		 NULL ,
+		실검집계기준                        		VARCHAR2(10)		 NULL ,
+		실검포털                          		VARCHAR2(15)		 NULL ,
+		실검데이터수집시간                     		TIMESTAMP(10)		 NULL 
+);
+
+COMMENT ON TABLE 실시간검색어 is 'realtime';
+COMMENT ON COLUMN 실시간검색어.실검번호 is 'realtime_no';
+COMMENT ON COLUMN 실시간검색어.실검키워드 is 'realtime_keyword';
+COMMENT ON COLUMN 실시간검색어.실검url is 'realtime_url';
+COMMENT ON COLUMN 실시간검색어.실검순위 is 'realtime_rank';
+COMMENT ON COLUMN 실시간검색어.실검집계기준 is 'realtime_standard';
+COMMENT ON COLUMN 실시간검색어.실검포털 is 'realtime_portal';
+COMMENT ON COLUMN 실시간검색어.실검데이터수집시간 is 'realtime_timestamp';
+
+
+/**********************************/
+/* Table Name: movie */
+/**********************************/
+CREATE TABLE 영화(
+		영화번호                          		NUMBER(10)		 NULL ,
+		영화제목                          		VARCHAR2(50)		 NULL ,
+		영화관람객수                        		NUMBER(15)		 NULL ,
+		영화예매율                         		VARCHAR2(10)		 NULL ,
+		영화집계기준                        		VARCHAR2(50)		 NULL ,
+		영화데이터수집시간                     		TIMESTAMP(10)		 NULL 
+);
+
+COMMENT ON TABLE 영화 is 'movie';
+COMMENT ON COLUMN 영화.영화번호 is 'movie_no';
+COMMENT ON COLUMN 영화.영화제목 is 'movie_title';
+COMMENT ON COLUMN 영화.영화관람객수 is 'movie_count';
+COMMENT ON COLUMN 영화.영화예매율 is 'movie_rate';
+COMMENT ON COLUMN 영화.영화집계기준 is 'movie_standard';
+COMMENT ON COLUMN 영화.영화데이터수집시간 is 'movie_timestamp';
+
+
+/**********************************/
+/* Table Name: music */
+/**********************************/
+CREATE TABLE 음악(
+		노래번호                          		NUMBER(10)		 NULL ,
+		노래제목                          		VARCHAR2(50)		 NULL ,
+		가수                            		VARCHAR2(50)		 NULL ,
+		노래순위                          		NUMBER(10)		 NULL ,
+		노래집계기준                        		VARCHAR2(50)		 NULL ,
+		노래데이터수집시간                     		TIMESTAMP(10)		 NULL 
+);
+
+COMMENT ON TABLE 음악 is 'music';
+COMMENT ON COLUMN 음악.노래번호 is 'music_no';
+COMMENT ON COLUMN 음악.노래제목 is 'music_title';
+COMMENT ON COLUMN 음악.가수 is 'music_singer';
+COMMENT ON COLUMN 음악.노래순위 is 'music_rank';
+COMMENT ON COLUMN 음악.노래집계기준 is 'music_standard';
+COMMENT ON COLUMN 음악.노래데이터수집시간 is 'music_timestamp';
+
+
+
+ALTER TABLE 즐겨찾기 ADD CONSTRAINT IDX_즐겨찾기_PK PRIMARY KEY (즐겨찾기번호);
+
+ALTER TABLE 회원 ADD CONSTRAINT IDX_회원_PK PRIMARY KEY (회원번호);
+ALTER TABLE 회원 ADD CONSTRAINT IDX_회원_FK0 FOREIGN KEY (즐겨찾기번호) REFERENCES 즐겨찾기 (즐겨찾기번호);
+
+ALTER TABLE 뉴스 ADD CONSTRAINT IDX_뉴스_PK PRIMARY KEY (뉴스번호);
+
+ALTER TABLE 실시간검색어 ADD CONSTRAINT IDX_실시간검색어_PK PRIMARY KEY (실검번호);
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.post_trend.mapper.RealtimeMapper">
+	<!-- resultMap -->
+	
+	
+	<!-- select -->
+	
+	
+	<!-- insert -->
+	<insert id="create"
+			parameterType="RealTime">
+			
+			<selectKey keyProperty="realtime_no" order="BEFORE" resultType="int">
+				SELECT REALTIME_NO_SEQ.nextval FROM DUAL
+			</selectKey>
+			INSERT INTO REALTIME
+			VALUES(#{realtime_no}, 
+					#{realtime_keyword}, 
+					#{realtime_url}, 
+					#{realtime_rank}, 
+					#{realtime_standard}, 
+					#{realtime_portal},
+					#{realtime_isIncrease},
+					#{realtime_degree}, 
+					CURRENT_TIMESTAMP)
+	</insert>
+	
+	<!-- ( REALTIME_NO_SEQ.nextval, 'keyword', 'url', 0, 'standard', 'portal', CURRENT_TIMESTAMP) -->
+</mapper>

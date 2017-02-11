@@ -1,0 +1,8 @@
+package com.post_trend.news;
+
+public interface NewsService {
+	/*
+	 * 크롤링한 news를 DB에 저장하는 서비스
+	 */
+	
+}

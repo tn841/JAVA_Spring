@@ -1,0 +1,44 @@
+package com.post_trend.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.post_trend.favorite.Favorite;
+import com.post_trend.favorite.FavoriteService;
+
+@Controller
+public class FavoriteController {
+
+	@Autowired
+	FavoriteService favoriteService;
+	
+	@RequestMapping("/favorite_create")
+	public void favorite_create(){
+		Favorite favorite = new Favorite(0, 0, 0, 1);
+		System.out.println("favorite_create : "+favoriteService.createFavorite(favorite));
+	}
+	
+	
+	@RequestMapping("/favorite_delete")
+	public void favorite_delete(){
+		System.out.println("favorite_delete : "+favoriteService.deleteFavoriteByNo(11));
+	}
+	
+	
+	@RequestMapping("/favorite_select")
+	public void favorite_select(){
+		Favorite favorite = favoriteService.findByFavorite_no(2);
+		System.out.println("favorite_select : "+favorite.getFavorite_no());
+	}
+	
+	
+	@RequestMapping("/favorite_update")
+	public void favorite_update(){
+		Favorite favorite = favoriteService.findByFavorite_no(2);
+		favorite.setFavorite_news(12);
+		favorite.setFavorite_realtime(12);
+		System.out.println(favorite.getFavorite_realtime());
+		System.out.println("favorite_update : "+favoriteService.updateFavorite(favorite));
+	}
+}

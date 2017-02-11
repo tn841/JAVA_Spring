@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.post_trend.mapper.FavoriteMapper">
+	<!-- resultMap -->
+	<resultMap type="com.post_trend.favorite.Favorite" id="Favorite">
+		<result property="favorite_no" column="favorite_no" />
+		<result property="favorite_news" column="favorite_news" />
+		<result property="favorite_realtime" column="favorite_realtime" />
+		<result property="favorite_movie" column="favorite_movie" />
+		<result property="favorite_music" column="favorite_music" />
+	</resultMap>
+	
+	<!-- select 
+		
+	-->
+	<select id="findByFavorite_no"
+			parameterType="java.lang.Integer"
+			resultMap="Favorite">
+		SELECT * FROM FAVORITE WHERE FAVORITE_NO = #{f_no}
+	</select>
+	
+	
+	
+	<!-- insert 
+	insert into favorite values(FAVORITE_NO_SEQ.nextval, 11, 22, 33, 44);
+	-->
+	<insert id="createFavorite"
+			parameterType="Favorite">
+		<selectKey keyProperty="favorite_no" order="BEFORE" resultType="int">
+			SELECT FAVORITE_NO_SEQ.nextval FROM DUAL
+		</selectKey>	
+
+		INSERT INTO FAVORITE 
+		VALUES (#{favorite_no},
+				#{favorite_news},
+				#{favorite_realtime},
+				#{favorite_movie},
+				#{favorite_music}
+		 )
+	</insert>
+	
+	
+	<!-- delete  -->
+	<delete id="deleteFavoriteByNo"
+			parameterType="int">
+		DELETE FROM FAVORITE WHERE FAVORITE_NO = #{f_no}
+	</delete>
+
+	
+	
+	<!-- update
+			UPDATE member
+		  	SET MEMBER_AGE = 99, MEMBER_job = 'edit'
+		  	WHERE MEMBER_NO = 11;
+	 -->
+	 <update id="updateFavorite"
+	 		 parameterType="Favorite">
+	 	UPDATE FAVORITE
+		SET FAVORITE_NEWS 		= #{favorite_news},
+			FAVORITE_REALTIME 	= #{favorite_realtime},
+			FAVORITE_MOVIE 		= #{favorite_movie},
+			FAVORITE_MUSIC 	= #{favoite_music}
+			
+		WHERE FAVORITE_NO = #{favorite_no}
+
+	 </update>
+	
+</mapper>

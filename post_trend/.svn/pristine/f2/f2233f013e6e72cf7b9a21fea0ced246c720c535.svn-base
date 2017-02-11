@@ -1,0 +1,150 @@
+package com.post_trend.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.post_trend.realtime.RealTimeDaoImpl;
+import com.post_trend.realtime.Realtime;
+
+@Controller
+public class RealtimeContorller {
+		
+	@Autowired
+	RealTimeDaoImpl realTimeDao;
+	
+	public RealtimeContorller() {
+		System.out.println("Controller 생성자");
+	}
+
+	public void setRealTimeDao(RealTimeDaoImpl realTimeDao) {
+		this.realTimeDao = realTimeDao;
+		System.out.println("** setRealTimeDao : "+realTimeDao);
+	}
+
+
+	@RequestMapping("/realtime_create")
+	public void realtime_create(){
+		Realtime newRealt=null;
+		
+		try {
+
+			Document document = Jsoup.connect("http://naver.com").get();
+			
+			Elements rank_time = document.select(".rank_time ");		
+			String rank_time_str = rank_time.toString();
+			int start, end;
+			start = rank_time_str.indexOf(">");
+			end = rank_time_str.indexOf("기준");
+			String crawlingStd = rank_time_str.substring(start+1, end-1);
+			
+		
+			Elements rank_list = document.select("#ranklist ol li");
+			
+			System.out.println(rank_list);
+			
+			for(int i=0; i<rank_list.size(); i++){
+				Element ele = rank_list.get(i);
+				String rank = ele.attr("value");
+				String url = ele.getElementsByTag("a").attr("href");
+				String keyword = ele.getElementsByClass("ell").text();
+				String increase = ele.getElementsByClass("tx").text();
+				int degree = 0;
+				try{
+					degree = Integer.parseInt(ele.getElementsByClass("rk").text());		
+				}
+				catch(Exception e){
+					
+				}
+				Realtime rt = new Realtime(keyword, url, Integer.parseInt(rank), crawlingStd, "네이버", increase, degree);
+				realTimeDao.create(rt);
+			}
+			
+			System.out.println(crawlingStd+" : insert 완료.");
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}//realtime_create
+	
+	
+	@RequestMapping("/daum")
+	public void daum(){
+		Document document = null;
+		try {
+			document = Jsoup.connect("http://www.daum.net/").get();
+			Elements realtimeword = document.select(".rank_dummy");
+			System.out.println(realtimeword.size());
+			for(int i=0; i<realtimeword.size(); i++){
+				Element ele = realtimeword.get(i);
+			
+				String str = ele.select(".rank_dummy").text();
+				String rank = ele.select(".rank_issue").text();
+				String url = ele.select(".rank_dummy a").attr("href");
+				String keywoard = ele.select(".txt_issue").text();
+				String increaseStr = ele.select(".num_issue").text();
+				int degree = 0;
+				
+				if(!increaseStr.equals("신규진입")){
+					String[] strArr = increaseStr.split(" ");
+					//System.out.println(strArr[0]);
+					//System.out.println(strArr[1]);
+					increaseStr = strArr[1].substring(0,2);
+					degree = Integer.parseInt(strArr[1].substring(2));
+				}else{
+					//System.out.println("신규진입");
+				}
+				//System.out.println(increaseStr+", "+degree);
+				Realtime rt = new Realtime(keywoard, url, Integer.parseInt(rank.replace("위", "")), new Date().toLocaleString(), "다음", increaseStr, degree);
+				realTimeDao.create(rt);
+				
+				
+			}//for
+			
+			//System.out.println(realtimeword);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}//daum
+	
+	
+
+	@RequestMapping("/realtime")
+	public String select_recent20rows(Model model){
+		ArrayList<Realtime> naver_rt = new ArrayList<Realtime>();
+		ArrayList<Realtime> daum_rt = new ArrayList<Realtime>();
+		
+		naver_rt = realTimeDao.select_naver_realtime();
+		model.addAttribute("naver_list", naver_rt);
+		
+		daum_rt = realTimeDao.select_daum_realtime();
+		model.addAttribute("daum_list", daum_rt);
+		
+		
+		//System.out.println("--"+realtimeList.get(0).getRealtime_standard()+"--");
+		for(Realtime row : naver_rt){
+			//System.out.println(row.getRealtime_rank()+", "+row.getRealtime_keyword());
+		}
+
+		return "realtime";
+	}
+	
+
+	
+}

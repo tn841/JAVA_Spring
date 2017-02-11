@@ -1,0 +1,33 @@
+package com.post_trend.news;
+
+public class NewsKeyword {
+	private int keyword_no;
+	private String keywordFrag;
+	
+	public NewsKeyword() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public NewsKeyword(int keyword_no, String keywordFrag) {
+		super();
+		this.keyword_no = keyword_no;
+		this.keywordFrag = keywordFrag;
+	}
+
+	public int getKeyword_no() {
+		return keyword_no;
+	}
+
+	public void setKeyword_no(int keyword_no) {
+		this.keyword_no = keyword_no;
+	}
+
+	public String getKeywordFrag() {
+		return keywordFrag;
+	}
+
+	public void setKeywordFrag(String keywordFrag) {
+		this.keywordFrag = keywordFrag;
+	}
+	
+}

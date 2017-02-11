@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.post_trend.mapper.NewsMapper">
+  <select id="selectBlog" resultType="News">
+    select * from Blog where id = #{id}
+  </select>
+  
+  <insert id="newsInsert" parameterType="News">
+  	INSERT INTO NEWS
+  	VALUES(#{news_no},#{headline},#{})
+  
+  </insert>
+</mapper>
