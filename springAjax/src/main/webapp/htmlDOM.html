@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript">
+			function useHtmlDOM(){
+				/******rootElement*******/
+				var htmlE = document.documentElement;
+				var nodeName = htmlE.nodeName;        
+				var nodeValue = htmlE.nodeValue;        
+				printLog("Element(html) nodeName:"+nodeName);
+				printLog("Element(html) nodeValue:"+nodeValue);
+				/***********Element.getElementsByTagName()*******/
+				var pNL = document.getElementsByTagName("p");
+				var divNL = document.getElementsByTagName("div");
+				printLog("p NodeList.length:"+pNL.length);
+				printLog("div NodeList.length:"+divNL.length);
+				for (var i = 0; i < pNL.length; i++) {
+					var pE = pNL.item(i);
+					var pStr = pE.firstChild.nodeValue;
+					printLog(i+"번째 p :"+pStr);
+				}
+				/***********innerHTML*******/
+				var h1E=document.getElementsByTagName("h1").item(0);
+				h1E.innerHTML='h1변경<hr/>';
+				alert("body 내용:"
+						+document.getElementsByTagName("body").item(0).innerHTML);
+				//document.getElementsByTagName("body").item(0).innerHTML='';
+				/**********Element.getElementById()***********/
+				//innerHTML
+				var div1E = document.getElementById('div1');
+				printLog("div1E 변경전:" + div1E.innerHTML);
+				div1E.innerHTML="<img src='image/loading.gif'/>"
+				alert("div1E 변경후:" + div1E.innerHTML)
+				
+				var div2E=document.getElementById("div2");
+				//Element생성
+				var imageE = document.createElement("img");
+				//Attr생성
+				imageE.setAttribute("src", "http://img.naver.net/static/www/u/2013/0731/nmms_224940510.gif")
+				//DOM Tree추가
+				div2E.appendChild(imageE);
+				
+				
+				var h2E = document.createElement("h2");
+				var h2T = document.createTextNode("h2 append");
+				h2E.appendChild(h2T);
+				
+				var h3E = document.createElement("h3");
+				var h3T = document.createTextNode("h3 append");
+				h3E.appendChild(h3T);
+				
+				document.getElementsByTagName("body").item(0).appendChild(h2E);
+				document.getElementsByTagName("body").item(0).appendChild(h3E);
+				
+				//DOM Tree제거
+				var div3E = document.getElementById('div3');
+				div3E.parentNode.removeChild(div3E);
+				
+				/************Node-->NodeLIst***********/
+				
+				var bodyE = document.getElementsByTagName('body').item(0);
+				var bodyChildNL = bodyE.childNodes;
+				printLog("body child node length:"+bodyChildNL.length);
+				printLog("bodyChildNL.item(0):"+bodyChildNL.item(0));
+				printLog("bodyChildNL.item(1):"+bodyChildNL.item(1));
+				printLog("bodyChildNL.item(2):"+bodyChildNL.item(2));
+				printLog("bodyChildNL.item(3):"+bodyChildNL.item(3));
+				
+			}
+			
+			window.onload = function(){
+				useHtmlDOM();
+			}
+			function printLog(msg){
+				var printDIVE = document.getElementById("printDiv");
+				printDIVE.innerHTML = printDIVE.innerHTML+ msg+"<br/>"
+			}
+		</script>
+	</head>
+	<body>
+		<h1>HTML DOM</h1>
+		<p>p</p>
+		<p id='p1'>p id='p1'</p>
+		<div id="div1">div id='div1'</div>
+		<div id="div2">div id='div2'</div>
+		<div id="div3">
+			<span id="span1">span1</span>
+			<span id="span2">span2</span>
+		</div>
+		<div id="printDiv" style="border: 1px dotted red;width:80%">
+		
+		</div>
+	</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	/*
+	tag selector
+	*/
+	span {
+		border-color: blue;
+		border-style: solid;
+		border-width: 1px;
+		color: blue;
+	}
+</style>
+<script type="text/javascript">
+	var xhr=null;
+	function ajaxRequest(){
+		/*
+		1.XMLHttpRequest  객체생성	
+		*/
+		window.xhr=new XMLHttpRequest();
+		
+		/*
+		2.요청설정
+		*/
+		xhr.onreadystatechange=responseCallback;
+		
+		var id=window.document.f.id.value;
+		
+		xhr.open('GET', 'helloAjaxRequest.do?id='+id, true);
+		
+		/*
+		3.요청
+		*/
+		xhr.send(null);	
+		
+	}
+	function responseCallback(){
+		//alert('응답이 도찯했을때실행되는 function');
+		
+		if(xhr.readyState==4){
+			var responseText= xhr.responseText;
+			/*
+			DOM tree에 접근해서 UI 갱신
+			id msg를 가진 span Element객체얻기
+			*/
+			var spanE = document.getElementById("msg");
+			//alert(spanE);
+			/*
+			span element안에 data넣기
+			*/
+			spanE.innerHTML = responseText;
+			
+		}
+	}
+</script>
+</head>
+<body>
+<h1>ajax 기반요청</h1><hr/>
+<form name="f">
+	아이디:<input type="text" name="id" onkeyup="ajaxRequest()">
+	<span id="msg"></span>
+</form>	
+</body>
+</html>

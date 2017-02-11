@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.suggest{
+		display: block;
+		border: 1px dotted blue;
+		width: 170px;
+		font-size: 10pt;	
+	}
+</style>
+<script type="text/javascript" src="js/httpRequest.js"></script>
+<script type="text/javascript">
+	function sendKeyword() {
+		var keyword = document.search.keyword.value;
+		if(keyword.trim()==''){
+			hideSuggestDiv();
+			return;
+		}
+		var params = 'keyword='+keyword;
+		sendRequest('suggest.jsp', params, displaySuggest, 'GET');
+	}
+	function displaySuggest() {
+		if(httpRequest.readyState==4){
+			/*
+			5|JAVA,JAVAVA,JARA,JIRA,JARA
+			*/
+			var resultCSV = httpRequest.responseText;
+			var resultCSVArray = resultCSV.split("|");
+			var count = resultCSVArray[0];
+			if(count==0){
+				hideSuggestDiv();
+				return;
+			}
+			
+			var keywordCSV  = resultCSVArray[1];
+			var keywordArray = keywordCSV.split(",");
+			var htmlStr="";
+			for (var i = 0; i < keywordArray.length; i++) {
+				htmlStr+="<a href=\"javascript:select('"+keywordArray[i]+"');\">"+keywordArray[i]+"</a><br/>"
+			}
+			document.getElementById('suggestList').innerHTML=htmlStr;
+			showSuggestDiv();
+		}
+	}
+	function select(keyword) {
+		//alert(keyword);
+		document.search.keyword.value=keyword;
+		hideSuggestDiv();
+		
+	}
+	
+	function showSuggestDiv(){
+		document.getElementById('suggest').style.display='block';
+	}
+	function hideSuggestDiv(){
+		document.getElementById('suggest').style.display='none';
+		
+	}
+	window.onload=function(){
+		hideSuggestDiv();
+		
+	}
+</script>
+</head>
+<body>
+	<h1>제시어기능구현</h1><hr/>
+	<form action="" name="search"> 
+		<input type="text" name="keyword" onkeyup="sendKeyword();" onfocus="sendKeyword();">&nbsp;
+		<input type="submit" value="검색">
+		<div id="suggest" class="suggest">
+			<div id="suggestList">
+				
+			</div>
+		</div>
+	</form>
+</body>
+</html>

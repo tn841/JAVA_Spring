@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	/*
+	tag selector(공통속성)
+	*/
+	h1{
+		color: blue;
+		border: 1px dashed red;
+	}
+	div{
+		font-size: 20pt;
+	}
+	ol{
+		list-style: none;
+	}
+	/*
+	class selector(같은 클래스에 적용되는속성)
+	*/
+	.myClass{
+		background-color: yellow;
+		border: 1px solid black;
+	}
+	
+	/*
+	id selector(특정아이디에적용되는속성)
+	*/
+	#content{
+		width: 800px;
+		margin: 20px auto 0px auto;
+		text-align: center;
+		background-color: orange;
+		border: 1px dotted blue;
+	}
+	#newsDiv{
+		display:none;
+		margin: 10px;
+		padding: 10px;
+		background-color: white;
+		border: 1px solid green;
+	}
+	
+</style>
+<script type="text/javascript" src="js/httpRequest.js"></script>
+<script type="text/javascript">
+	function showNewsDiv(){
+		document.getElementById('newsDiv').style.display='block';
+	}
+	function hideNewsDiv(){
+		document.getElementById('newsDiv').style.display='none';
+	}
+	function getNews() {
+		sendRequest('newsTitlesXML.do', null, newsDisplay, 'GET');
+	}
+	function newsDisplay() {
+		if(httpRequest.readyState==4){
+			/*
+			<?xml version="1.0" encoding="UTF-8"?>
+			<result>
+				<count>5</count>
+				<data>
+					<newsList>
+						<news>
+							<title>오늘은 불금~~</title>
+							<company>중앙일보</company>
+							<date>2015-11-27</date>
+						</news>
+							....
+					</newsList>
+				</data>
+			</result>
+			*/
+			var xmlDocument = httpRequest.responseXML;
+			console.log(xmlDocument);
+			var Document = xmlDocument;
+			
+			var countNL = Document.getElementsByTagName("count");
+			var countE  = countNL[0];
+			var countT  = countE.firstChild;
+			var countStr= countT.nodeValue;
+			if(countStr==0){
+				return;
+			}
+			/********news 추가(CORE DOM)******/
+			var newsE = Document.createElement("news");
+			var titleE = Document.createElement("title");
+			var titleT = Document.createTextNode("오늘은 크리스마스 다음날");
+			titleE.appendChild(titleT);
+			var companyE = Document.createElement("company");
+			var companyT = Document.createTextNode("조성일보");
+			companyE.appendChild(companyT);
+			var dateE = Document.createElement("date");
+			var dateT = Document.createTextNode("2016-12-26");
+			dateE.appendChild(dateT)
+			newsE.appendChild(titleE);
+			newsE.appendChild(companyE);
+			newsE.appendChild(dateE);
+			var newsListE=Document
+						.getElementsByTagName('newsList')
+							.item(0);
+			
+			newsListE.appendChild(newsE);
+			/*******************************************************/
+			
+			var newsNL = Document.getElementsByTagName("news");
+			/*
+			- Nodelist.length
+			- Nodelist.item(index);
+			*/
+			var htmlStr="<ol>";
+			for (var i = 0; i < newsNL.length; i++) {
+				var newsE = newsNL.item(i);
+				
+				/*
+				<news>
+					<title>오늘은 불금~~</title>
+					<company>중앙일보</company>
+					<date>2015-11-27</date>
+				</news>
+				*/
+				var titleStr=newsE.getElementsByTagName("title")
+								  .item(0)
+								  .firstChild
+							 	  .nodeValue;
+				var comapnyStr=newsE.getElementsByTagName("company")
+									.item(0)
+									.firstChild
+			 						.nodeValue;
+				var dateStr=newsE.getElementsByTagName("date")
+									.item(0)
+									.firstChild
+									.nodeValue;
+				htmlStr+="<li>"+titleStr+"["+comapnyStr+"]"+dateStr+"</li>";
+			}
+			htmlStr+="</ol>";
+			document.getElementById('newsDiv').innerHTML = htmlStr;
+			showNewsDiv();
+		}
+	}
+	window.onload=function(){
+		//getNews();
+		//setInterval(getNews, 3000);
+	}
+</script>
+</head>
+<body class="myClass">
+	<div id="content">
+		<h1 onmouseover="getNews()" onmouseout="hideNewsDiv()">실시간 뉘우스[XML]</h1>
+		<div id="newsDiv">
+			news data
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	/*
+	 id selector(CSS)
+	*/
+	#content{
+		background:gray;
+		border: 1px solid blue;
+		width: 500px;
+		padding: 50px;
+		padding-top:10px;
+		margin-left: auto;
+		margin-right: auto;
+				 
+	}
+</style>
+<script type="text/javascript" src="js/httpRequest.js"></script>
+<script type="text/javascript">
+	function requestServerTime(){
+		sendRequest('clock.do', null, printServerTime, 'GET');
+		
+	}
+	function printServerTime(){
+		if(httpRequest.readyState==4){
+			var serverTimeStr = httpRequest.responseText;
+			var serverTimeSpanE=document.getElementById("serverTimeSpan");
+			serverTimeSpanE.innerHTML=serverTimeStr;
+		}
+	}
+	
+	window.onload = function(){
+		var intervalID=window.setInterval(requestServerTime, 1000);
+		//clearInterval(intervalID)
+	};
+</script>
+</head>
+<body>
+<div id="content">
+	<h1>clock[setTimeout,setInterval]</h1><hr/>
+	<div>
+		현재의 서버시간은<span id="serverTimeSpan">14:00</span> 입니다.
+	</div>
+</div>
+</body>
+</html>
